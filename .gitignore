@@ -1,0 +1,14 @@
+**/.idea
+**/*.iml
+**/.classpath
+**/.idea
+**/.project
+**/.settings
+**/.DS_Store
+**/.apt_generated
+**/logs
+**/target
+**/*.xcodeproj
+.checkstyle
+.factorypath
+*.launch
