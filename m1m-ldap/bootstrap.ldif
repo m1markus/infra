@@ -1,0 +1,35 @@
+dn: ou=Groups,dc=m1m,dc=ch
+changetype: add
+objectclass: organizationalUnit
+ou: Groups
+
+dn: ou=Users,dc=m1m,dc=ch
+changetype: add
+objectclass: organizationalUnit
+ou: Users
+
+dn: cn=mue,ou=Users,dc=m1m,dc=ch
+changetype: add
+objectclass: inetOrgPerson
+cn: mue
+givenname: Markus
+sn: Mueller
+displayname: Markus Mueller
+mail: mue@m1m.ch
+userpassword: {SHA}Zx6HudhXJhpVDjFJ8Zj1RT3i+8U=
+
+dn: cn=sam,ou=Users,dc=m1m,dc=ch
+changetype: add
+objectclass: inetOrgPerson
+cn: sam
+givenname: Sandra
+sn: Mueller
+displayname: Sandra Mueller
+mail: sam@m1m.ch
+userpassword: {SHA}8WvtVhieJJ/kyo7RCh7K5g6M6sA=
+
+dn: cn=Developer,ou=Groups,dc=m1m,dc=ch
+changetype: add
+objectClass: groupofnames
+cn: Developer
+member: cn=mue,ou=Users,dc=m1m,dc=ch
