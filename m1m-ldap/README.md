@@ -20,13 +20,13 @@ docker build -t m1m-ldap .
 
 ## Start
 ```
-docker run -p 389:389 -p 636:636 --name ldap-m1m --detach m1m-ldap
+docker run -p 389:389 -p 636:636 --rm --name ldap-m1m --detach m1m-ldap
 ```
 
 ## Stop
 ```
 docker stop ldap-m1m
-docker rm ldap-m1m
+docker rm ldap-m1m      (not needed when run with flag ... --rm)
 ```
 
 ## List content

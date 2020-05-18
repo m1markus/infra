@@ -33,3 +33,16 @@ changetype: add
 objectClass: groupOfUniqueNames
 cn: Developer
 uniqueMember: cn=mue,ou=Users,dc=m1m,dc=ch
+
+dn: cn=URL_Tool_Admin,ou=Groups,dc=m1m,dc=ch
+changetype: add
+objectClass: groupOfUniqueNames
+cn: Developer
+uniqueMember: cn=mue,ou=Users,dc=m1m,dc=ch
+
+dn: cn=IQ_Users,ou=Groups,dc=m1m,dc=ch
+changetype: add
+objectClass: groupOfUniqueNames
+cn: Developer
+uniqueMember: cn=mue,ou=Users,dc=m1m,dc=ch
+uniqueMember: cn=sam,ou=Users,dc=m1m,dc=ch
