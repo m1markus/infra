@@ -1,5 +1,6 @@
 package ch.m1m.infra.authserver;
 
+import ch.m1m.infra.ldap.AuthProviderLdap;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

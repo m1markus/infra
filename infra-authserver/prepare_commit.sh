@@ -1,6 +1,7 @@
 mvn clean
-rm -rf ./node_modules/
-rm -f webpack.config.js
-rm -f package.json
-rm -f package-lock.json
-rm -f webpack.generated.js
+
+rm -rf server/./node_modules/
+rm -f server/webpack.config.js
+rm -f server/package.json
+rm -f server/package-lock.json
+rm -f server/webpack.generated.js

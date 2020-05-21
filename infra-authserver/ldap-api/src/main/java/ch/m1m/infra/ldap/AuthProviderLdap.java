@@ -1,4 +1,4 @@
-package ch.m1m.infra.authserver;
+package ch.m1m.infra.ldap;
 
 import com.unboundid.ldap.sdk.*;
 import org.slf4j.Logger;
