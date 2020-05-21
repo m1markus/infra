@@ -11,13 +11,21 @@ public class AuthProviderLdap {
 
     private static final Logger log = LoggerFactory.getLogger(AuthProviderLdap.class);
 
-    private static String ldapHost;
-    private static int ldapPort;
-    private static String ldapBindDNTemplate;
+    private String ldapHost;
+    private int ldapPort;
 
-    public AuthProviderLdap(String host, int port, String bindDNTemplate) {
+    private String ldapAdminUser;
+    private String ldapAdminPassword;
+
+    private String ldapBindDNTemplate;
+
+    public AuthProviderLdap(String host, int port,
+                            String adminUser, String adminPassword,
+                            String bindDNTemplate) {
         ldapHost = host;
         ldapPort = port;
+        ldapAdminUser = adminUser;
+        ldapAdminPassword = adminPassword;
         ldapBindDNTemplate = bindDNTemplate;
     }
 
@@ -49,11 +57,11 @@ public class AuthProviderLdap {
         return result;
     }
 
-    LDAPConnection getAdminSession(String adminDN, String password) throws LDAPException {
+    LDAPConnection getAdminSession() throws LDAPException {
         LDAPConnection ldapConnection = null;
 
         ldapConnection = new LDAPConnection(ldapHost, ldapPort);
-        ldapConnection.bind(adminDN, password);
+        ldapConnection.bind(ldapAdminUser, ldapAdminPassword);
 
         return ldapConnection;
     }

@@ -13,12 +13,14 @@ class AuthProviderLdapTest {
 
     private static String ldapHost = "localhost";
     private static int ldapPort = 389;
-    private static String ldapBindDNTemplate = "cn=%s,ou=users,dc=m1m,dc=ch";
 
     private static String ldapAdminUser = "cn=admin,dc=m1m,dc=ch";
     private static String ldapAdminPassword = "toSecret2beTrue,2022";
 
-    AuthProviderLdap ldapProvider = new AuthProviderLdap(ldapHost, ldapPort, ldapBindDNTemplate);
+    private static String ldapBindDNTemplate = "cn=%s,ou=users,dc=m1m,dc=ch";
+
+    AuthProviderLdap ldapProvider = new AuthProviderLdap(ldapHost, ldapPort,
+            ldapAdminUser, ldapAdminPassword, ldapBindDNTemplate);
 
     /*
     @BeforeAll
@@ -59,7 +61,7 @@ class AuthProviderLdapTest {
     void givenValidAdminCred_whenCallingGetAdminSession_thenGetAValidConnection() throws LDAPException {
         // GIVEN
         // WHEN
-        LDAPConnection conn = ldapProvider.getAdminSession(ldapAdminUser, ldapAdminPassword);
+        LDAPConnection conn = ldapProvider.getAdminSession();
 
         // THEN
         assertNotNull(conn);
@@ -70,7 +72,7 @@ class AuthProviderLdapTest {
 
         // GIVEN
         // WHEN
-        LDAPConnection conn = ldapProvider.getAdminSession(ldapAdminUser, ldapAdminPassword);
+        LDAPConnection conn = ldapProvider.getAdminSession();
         List<DN> groupList = ldapProvider.readAllUserGroups("mue", conn);
 
         // THEN
