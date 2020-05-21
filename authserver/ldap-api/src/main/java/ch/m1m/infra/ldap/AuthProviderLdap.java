@@ -69,7 +69,7 @@ public class AuthProviderLdap {
     // ldapsearch -x -H ldap://localhost -b dc=m1m,dc=ch -D "cn=admin,dc=m1m,dc=ch" -w toSecret2beTrue,2022
     //            "(&(objectClass=inetOrgPerson)(cn=sam))" memberOf
     //
-    public List<String> readAllUserGroups(String user, LDAPConnection conn) throws LDAPException {
+    public List<String> readAllUserGroups(String user) throws LDAPException {
         List<String> groupList = new ArrayList<>();
 
         String ldapFilter = String.format("(&(objectClass=inetOrgPerson)(cn=%s))", user);
@@ -79,6 +79,7 @@ public class AuthProviderLdap {
         SearchRequest searchRequest = new SearchRequest(baseDN,
                 SearchScope.SUB, filter, "memberOf");
 
+        LDAPConnection conn = getAdminSession();
         SearchResult searchResult = conn.search(searchRequest);
         ResultCode rc = searchResult.getResultCode();
 
@@ -90,7 +91,9 @@ public class AuthProviderLdap {
                 if ("memberOf".equals(attr.getName())) {
                     String[] values = attr.getValues();
                     for (String groupString : values) {
-                        groupList.add(groupString);
+                        String groupWithRemovedCN = LDAPUtils.removeLdapAttrPrefix(groupString);
+                        groupList.add(groupWithRemovedCN);
+
                         //DN dn = new DN(groupString);
                         //if (dn != null) groupList.add(dn);
                     }

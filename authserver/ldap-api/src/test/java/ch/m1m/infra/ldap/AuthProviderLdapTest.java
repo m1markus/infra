@@ -72,11 +72,21 @@ class AuthProviderLdapTest {
 
         // GIVEN
         // WHEN
-        LDAPConnection conn = ldapProvider.getAdminSession();
-        List<String> groupList = ldapProvider.readAllUserGroups("mue", conn);
+        List<String> groupList = ldapProvider.readAllUserGroups("mue");
 
         // THEN
         System.out.println("user 'mue' has groups: " + groupList);
         assertTrue(groupList.size() > 0);
+    }
+
+    //@Test
+    void test_just_some_code() throws LDAPException {
+        DN dn1 = new DN("cn=Developer,ou=Groups,dc=m1m,dc=ch");
+        DN parent = new DN(dn1.getParentString());
+
+        //System.out.println("dn1: " + dn1.toString());
+        //System.out.println("parent: " + parent.toString());
+
+        LDAPUtils.removeLdapAttrPrefix(dn1.toString());
     }
 }

@@ -28,6 +28,16 @@ displayname: Sandra Mueller
 mail: sam@m1m.ch
 userpassword: {SHA}8WvtVhieJJ/kyo7RCh7K5g6M6sA=
 
+dn: cn=nobody,ou=Users,dc=m1m,dc=ch
+changetype: add
+objectclass: inetOrgPerson
+cn: nobody
+givenname: nobody
+sn: NOBODY
+displayname: nobody NOBODY
+mail: nobody@m1m.ch
+userpassword: {SHA}Nl7BemdfMnO8FsdHYa2D8s8HxZo=
+
 dn: cn=Developer,ou=Groups,dc=m1m,dc=ch
 changetype: add
 objectClass: groupOfUniqueNames
