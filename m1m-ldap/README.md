@@ -31,17 +31,17 @@ docker rm ldap-m1m      (not needed when run with flag ... --rm)
 
 ## List content
 ```
-docker exec ldap-m1m ldapsearch -x -H ldap://localhost -b dc=m1m,dc=ch -D "cn=admin,dc=m1m,dc=ch" -w toSecret2beTrue,2022
+docker exec ldap-m1m ldapsearch -x -H ldap://localhost -b dc=m1m,dc=ch -D "cn=admin,dc=m1m,dc=ch" -w toSecret2beTrue42
 ```
 
 ### Query a specific user (cn=mue)
 ```
-docker exec ldap-m1m ldapsearch -x -H ldap://localhost -b dc=m1m,dc=ch -D "cn=admin,dc=m1m,dc=ch" -w toSecret2beTrue,2022 "(&(objectClass=inetOrgPerson)(cn=mue))"
+docker exec ldap-m1m ldapsearch -x -H ldap://localhost -b dc=m1m,dc=ch -D "cn=admin,dc=m1m,dc=ch" -w toSecret2beTrue42 "(&(objectClass=inetOrgPerson)(cn=mue))"
 ```
 
 ### Query all groups from a user
 ```
-docker exec ldap-m1m ldapsearch -x -H ldap://localhost -b dc=m1m,dc=ch -D "cn=admin,dc=m1m,dc=ch" -w toSecret2beTrue,2022 "(&(objectClass=inetOrgPerson)(cn=mue))" memberOf
+docker exec ldap-m1m ldapsearch -x -H ldap://localhost -b dc=m1m,dc=ch -D "cn=admin,dc=m1m,dc=ch" -w toSecret2beTrue42 "(&(objectClass=inetOrgPerson)(cn=mue))" memberOf
 ```
 
 ### Execute commands in the container

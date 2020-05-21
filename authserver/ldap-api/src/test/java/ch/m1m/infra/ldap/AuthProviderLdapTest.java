@@ -15,7 +15,7 @@ class AuthProviderLdapTest {
     private static int ldapPort = 389;
 
     private static String ldapAdminUser = "cn=admin,dc=m1m,dc=ch";
-    private static String ldapAdminPassword = "toSecret2beTrue,2022";
+    private static String ldapAdminPassword = "toSecret2beTrue42";
 
     private static String ldapBindDNTemplate = "cn=%s,ou=users,dc=m1m,dc=ch";
 
