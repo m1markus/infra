@@ -24,8 +24,11 @@ public class LoginView extends VerticalLayout {
         // FIXME: read config values from file
         String ldapHost = "localhost";
         int ldapPort = 389;
+        String ldapAdminUser = "cn=admin,dc=m1m,dc=ch";
+        String ldapAdminPassword = "toSecret2beTrue42";
         String ldapBindDNTemplate = "cn=%s,ou=users,dc=m1m,dc=ch";
-        authProvider = new AuthProviderLdap(ldapHost, ldapPort, ldapBindDNTemplate);
+
+        authProvider = new AuthProviderLdap(ldapHost, ldapPort, ldapAdminUser, ldapAdminPassword, ldapBindDNTemplate);
 
         this.loginOverlay.setOpened(true);
         this.loginOverlay.setForgotPasswordButtonVisible(false);
