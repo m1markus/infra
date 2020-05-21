@@ -73,7 +73,7 @@ class AuthProviderLdapTest {
         // GIVEN
         // WHEN
         LDAPConnection conn = ldapProvider.getAdminSession();
-        List<DN> groupList = ldapProvider.readAllUserGroups("mue", conn);
+        List<String> groupList = ldapProvider.readAllUserGroups("mue", conn);
 
         // THEN
         System.out.println("user 'mue' has groups: " + groupList);

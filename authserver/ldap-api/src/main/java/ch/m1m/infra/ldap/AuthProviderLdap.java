@@ -69,8 +69,8 @@ public class AuthProviderLdap {
     // ldapsearch -x -H ldap://localhost -b dc=m1m,dc=ch -D "cn=admin,dc=m1m,dc=ch" -w toSecret2beTrue,2022
     //            "(&(objectClass=inetOrgPerson)(cn=sam))" memberOf
     //
-    public List<DN> readAllUserGroups(String user, LDAPConnection conn) throws LDAPException {
-        List<DN> groupList = new ArrayList<>();
+    public List<String> readAllUserGroups(String user, LDAPConnection conn) throws LDAPException {
+        List<String> groupList = new ArrayList<>();
 
         String ldapFilter = String.format("(&(objectClass=inetOrgPerson)(cn=%s))", user);
         Filter filter = Filter.create(ldapFilter);
@@ -90,8 +90,9 @@ public class AuthProviderLdap {
                 if ("memberOf".equals(attr.getName())) {
                     String[] values = attr.getValues();
                     for (String groupString : values) {
-                        DN dn = new DN(groupString);
-                        if (dn != null) groupList.add(dn);
+                        groupList.add(groupString);
+                        //DN dn = new DN(groupString);
+                        //if (dn != null) groupList.add(dn);
                     }
                 }
             }
