@@ -47,6 +47,7 @@
     </dependencyManagement>
 
     <modules>
+        <module>office</module>
         <module>ldap-api</module>
         <module>server</module>
     </modules>
