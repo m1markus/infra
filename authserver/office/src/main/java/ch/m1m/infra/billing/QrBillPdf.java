@@ -18,12 +18,23 @@ public class QrBillPdf {
 
     private static final QrBillLanguageDE langDE = new QrBillLanguageDE();
 
+    // this is to fine tune the starting points depending on the
+    //
+    private float offsetX = 0f;
+    private float offsetY = 0f;
+
+    private boolean printHelperLines = true;
+
     public static void main(String... args) throws IOException {
 
         String fileName = "/tmp/qr_bill.pdf";
         QrBillTestDataGenerator testData = new QrBillTestDataGenerator();
 
         QrBillPdf bill = new QrBillPdf();
+
+        // offset test
+        //
+        //bill.setOffsetX(100f); bill.setOffsetY(100f);
 
         String language = "DE";
         QrBillData data = testData.generateBillData_case_1();
@@ -50,17 +61,17 @@ public class QrBillPdf {
         PDPage page = new PDPage(PDRectangle.A4);
         QrBillLanguage langText = getLanguage(language);
 
-        float offsetX = 0f;
-        float offsetY = 0f;
+        float lowerLeftX = 0f + getOffsetX();
+        float lowerLeftY = 0f + getOffsetY();
 
         final float frameBillWidth = QrBillDeviceUnit.FORM_WIDTH;
         final float frameBillHeight = QrBillDeviceUnit.FORM_HEIGHT;
 
         PDPageContentStream stream = new PDPageContentStream(document, page);
 
-        drawCutLines(frameBillWidth, frameBillHeight, stream, offsetX, offsetY, langText);
-        drawReceipt(frameBillHeight, data, stream, offsetX, offsetY, langText);
-        drawPayment(frameBillHeight, data, stream, offsetX, offsetY, langText);
+        drawCutLines(frameBillWidth, frameBillHeight, stream, lowerLeftX, lowerLeftY, langText);
+        drawReceipt(frameBillHeight, data, stream, lowerLeftX, lowerLeftY, langText);
+        drawPayment(frameBillHeight, data, stream, lowerLeftX, lowerLeftY, langText);
 
         stream.close();
 
@@ -68,11 +79,10 @@ public class QrBillPdf {
     }
 
     private void drawReceipt(float frameBillHeight, QrBillData data, PDPageContentStream stream,
-                             float offsetX, float offsetY, QrBillLanguage langText) throws IOException {
+                             float lowerLeftX, float lowerLeftY, QrBillLanguage langText) throws IOException {
 
-        float leftX = QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
-        leftX += offsetX;
-        float startY = frameBillHeight + offsetY - 50;
+        float leftX = lowerLeftX + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
+        float startY = lowerLeftY + frameBillHeight - 50;
 
         stream.beginText();
 
@@ -83,11 +93,10 @@ public class QrBillPdf {
     }
 
     private void drawPayment(float frameBillHeight, QrBillData data, PDPageContentStream stream,
-                             float offsetX, float offsetY, QrBillLanguage langText) throws IOException {
+                             float lowerLeftX, float lowerLeftY, QrBillLanguage langText) throws IOException {
 
-        float leftX = QrBillDeviceUnit.RECEIPT_WIDTH + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
-        leftX += offsetX;
-        float startY = frameBillHeight + offsetY - 50;
+        float leftX = lowerLeftX + QrBillDeviceUnit.RECEIPT_WIDTH + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
+        float startY = lowerLeftY + frameBillHeight - 50;
 
         stream.beginText();
 
@@ -98,7 +107,9 @@ public class QrBillPdf {
     }
 
     private void drawCutLines(float frameBillWidth, float frameBillHeight, PDPageContentStream stream,
-                              float offsetX, float offsetY, QrBillLanguage langText) throws IOException {
+                              float lowerLeftX, float lowerLeftY, QrBillLanguage langText) throws IOException {
+
+        stream.saveGraphicsState();
 
         stream.setLineWidth(0.5f);
         stream.setStrokingColor(Color.BLACK);
@@ -106,24 +117,47 @@ public class QrBillPdf {
 
         // horizontal upper line
         //
-        float x = 0 + offsetX;
-        float y = frameBillHeight + offsetY;
-        stream.moveTo(x, y);
+        float x = lowerLeftX;
+        float top = frameBillHeight + lowerLeftY;
+        stream.moveTo(x, top);
         x = frameBillWidth;
-        stream.lineTo(x, y);
+        stream.lineTo(x, top);
+        stream.stroke();
 
         // vertical "Empfangsschein"
         //
-        float receiptWidth = QrBillDeviceUnit.RECEIPT_WIDTH;
-        float receiptX = receiptWidth + offsetX;
-        stream.moveTo(receiptX, 0);
-        stream.lineTo(receiptX, y);
+        float receiptX = lowerLeftX + QrBillDeviceUnit.RECEIPT_WIDTH;
+        stream.moveTo(receiptX, lowerLeftY);
+        stream.lineTo(receiptX, top);
+        stream.stroke();
+
+        stream.restoreGraphicsState();
+
+        // draw some helper lines
+        //
+        //if (printHelperLines) {
+        if (true) {
+            stream.setStrokingColor(Color.BLUE);
+            stream.setLineWidth(0.5f);
+
+            x = lowerLeftX + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
+            stream.moveTo(x, lowerLeftY);
+            stream.lineTo(x, top);
+            stream.stroke();
+
+            x = lowerLeftX + QrBillDeviceUnit.RECEIPT_WIDTH + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
+            stream.moveTo(x, lowerLeftY);
+            stream.lineTo(x, top);
+            stream.stroke();
+
+            stream.setStrokingColor(Color.BLACK);
+        }
 
         // print notes to cut off before payment
         //
         String cutText = langText.getVorDerZahlungAbtrennen();
         float textX = receiptX + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
-        float textY = y + 10;
+        float textY = top + 10;
         stream.beginText();
         drawText(cutText, textX, textY, FONT_NORMAL, 10, stream);
         stream.endText();
@@ -146,5 +180,21 @@ public class QrBillPdf {
             default:
                 return langDE;
         }
+    }
+
+    public float getOffsetX() {
+        return offsetX;
+    }
+
+    public void setOffsetX(float offsetX) {
+        this.offsetX = offsetX;
+    }
+
+    public float getOffsetY() {
+        return offsetY;
+    }
+
+    public void setOffsetY(float offsetY) {
+        this.offsetY = offsetY;
     }
 }
