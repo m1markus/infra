@@ -1,8 +1,11 @@
 package ch.m1m.infra.billing;
 
+// https://www.paymentstandards.ch/dam/downloads/style-guide-de.pdf
 // https://www.paymentstandards.ch/dam/downloads/ig-qr-bill-de.pdf
 // https://www.paymentstandards.ch/dam/downloads/qrcodegenerator.java
 // https://www.paymentstandards.ch/de/home/software-partner/faq.html
+// all additional info
+// https://www.paymentstandards.ch/de/shared/communication-grid.html#c=/content/paymentstandards/global/en/taxonomy/target-group/financial-institutes
 
 import java.util.ArrayList;
 import java.util.List;

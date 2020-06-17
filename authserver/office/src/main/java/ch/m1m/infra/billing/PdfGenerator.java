@@ -13,8 +13,29 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 // https://www.tutorialspoint.com/pdfbox/pdfbox_inserting_image.htm
+//
+// Dynamic len oft text to fit the line
+// http://www.kscodes.com/java/add-multiple-lines-pdf-using-apache-pdfbox/
+//
+// some text and box example
+// https://coderanch.com/wiki/659953/PDFBox
+//
+// text and box
+// http://www.ulfdittmer.com/view?PdfBox
+//
+// calc box around text (for center)
+// https://memorynotfound.com/apache-pdfbox-center-text-pdf-document-example/
+//
+//
+//
+// pdf 1.7 spec
+// https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/PDF32000_2008.pdf
 
 public class PdfGenerator {
+
+    float deviceUnitsPerMillimeter;
+    float offsetX = 0f;
+    float offsetY = 0f;
 
     public static void main(String... args) throws IOException {
 
@@ -23,10 +44,28 @@ public class PdfGenerator {
         prog.generateSimplePdf(fileName);
     }
 
+    private void calcDeviceUnitPerMillimeters(PDRectangle paperFormat, PDRectangle printableSize) {
+        if (PDRectangle.A4 == paperFormat) {
+            deviceUnitsPerMillimeter = printableSize.getUpperRightX() / 210f;
+        } else {
+            deviceUnitsPerMillimeter = 595f / 210f;
+        }
+    }
+
+    private float convertMillimetersToDeviceUnit(float millimeters) {
+        return millimeters * deviceUnitsPerMillimeter;
+    }
+
     public PDDocument createNewSimplePdf() throws IOException {
         PDDocument document = new PDDocument();
+        PDRectangle docA4 = PDRectangle.A4;
 
-        PDPage page = new PDPage(PDRectangle.A4);
+        PDPage page = new PDPage(docA4);
+        PDRectangle pageRect = page.getCropBox();
+        calcDeviceUnitPerMillimeters(docA4, pageRect);
+        String pageCoord = String.format("pageRect lower left: %f, %f upper right: %f, %f",
+                pageRect.getLowerLeftX(), pageRect.getLowerLeftY(), pageRect.getUpperRightX(), pageRect.getUpperRightY());
+        System.out.println(pageCoord);
 
         PDDocumentInformation pdd = document.getDocumentInformation();
         String pdfboxVersion = Version.getVersion();
@@ -67,6 +106,15 @@ public class PdfGenerator {
         stream.addRect(200, 50, 100, 100);
         stream.fill();
 
+        stream.setLineWidth(0.5f);
+        stream.setStrokingColor(Color.BLACK);
+        stream.moveTo(0,0);
+        stream.lineTo(595, 841);
+        stream.stroke();
+
+        //PDImageXObject.createFromByteArray()
+        //BufferedImage myImage.
+
         stream.close();
 
         document.addPage(page);
@@ -79,6 +127,8 @@ public class PdfGenerator {
         document.close();
 
         System.out.println("number of pages: " + document.getNumberOfPages());
+        System.out.println("created pdf:     " + fileName);
+
 
             /*
             // convert pdf to byteArray

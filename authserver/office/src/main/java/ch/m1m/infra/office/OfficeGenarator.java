@@ -42,10 +42,8 @@ public class OfficeGenarator {
         String osCommandLine = String.format("open -a /Applications/%s %s", application, fileName);
         System.out.println("calling: " + osCommandLine);
 
-        Process process;
         try {
-            process = Runtime.getRuntime()
-                    .exec(osCommandLine);
+            Runtime.getRuntime().exec(osCommandLine);
             rc = 0;
         } catch (IOException e) {
             System.err.println(e);
