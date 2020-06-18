@@ -127,9 +127,7 @@ public class QrBillPdf {
         // vertical "Empfangsschein"
         //
         float receiptX = lowerLeftX + QrBillDeviceUnit.RECEIPT_WIDTH;
-        stream.moveTo(receiptX, lowerLeftY);
-        stream.lineTo(receiptX, top);
-        stream.stroke();
+        drawVerticalLine(receiptX, lowerLeftY, QrBillDeviceUnit.FORM_HEIGHT, stream);
 
         stream.restoreGraphicsState();
 
@@ -141,14 +139,10 @@ public class QrBillPdf {
             stream.setLineWidth(0.5f);
 
             x = lowerLeftX + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
-            stream.moveTo(x, lowerLeftY);
-            stream.lineTo(x, top);
-            stream.stroke();
+            drawVerticalLine(x, lowerLeftY, QrBillDeviceUnit.FORM_HEIGHT, stream);
 
             x = lowerLeftX + QrBillDeviceUnit.RECEIPT_WIDTH + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
-            stream.moveTo(x, lowerLeftY);
-            stream.lineTo(x, top);
-            stream.stroke();
+            drawVerticalLine(x, lowerLeftY, QrBillDeviceUnit.FORM_HEIGHT, stream);
 
             stream.setStrokingColor(Color.BLACK);
         }
@@ -162,6 +156,13 @@ public class QrBillPdf {
         drawText(cutText, textX, textY, FONT_NORMAL, 10, stream);
         stream.endText();
 
+        stream.stroke();
+    }
+
+    private void drawVerticalLine(float x, float y, float height, PDPageContentStream stream) throws IOException {
+        stream.moveTo(x, y);
+        float topY = y + height;
+        stream.lineTo(x, topY);
         stream.stroke();
     }
 
