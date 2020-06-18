@@ -4,7 +4,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDSimpleFont;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.awt.*;
@@ -12,8 +12,8 @@ import java.io.IOException;
 
 public class QrBillPdf {
 
-    private static final PDType1Font FONT_NORMAL = PDType1Font.HELVETICA;
-    private static final PDType1Font FONT_BOLD = PDType1Font.HELVETICA_BOLD;
+    private static final PDFont FONT_NORMAL = PDType1Font.HELVETICA;
+    private static final PDFont FONT_BOLD = PDType1Font.HELVETICA_BOLD;
     private static final int FONT_SIZE_TITLE = 11;
 
     private static final QrBillLanguageDE langDE = new QrBillLanguageDE();
@@ -82,12 +82,13 @@ public class QrBillPdf {
                              float lowerLeftX, float lowerLeftY, QrBillLanguage langText) throws IOException {
 
         float leftX = lowerLeftX + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
-        float startY = lowerLeftY + frameBillHeight - 50;
+        float startY = lowerLeftY + frameBillHeight - QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
 
         stream.beginText();
 
         String title = langText.getEmpfangsschein();
-        drawText(title, leftX, startY, FONT_BOLD, FONT_SIZE_TITLE, stream);
+        float currentY = startY - QrBillDeviceUnit.millimetersToDeviceUnit(6);
+        drawText(title, leftX, currentY, FONT_BOLD, FONT_SIZE_TITLE, stream);
 
         stream.endText();
     }
@@ -96,12 +97,13 @@ public class QrBillPdf {
                              float lowerLeftX, float lowerLeftY, QrBillLanguage langText) throws IOException {
 
         float leftX = lowerLeftX + QrBillDeviceUnit.RECEIPT_WIDTH + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
-        float startY = lowerLeftY + frameBillHeight - 50;
+        float startY = lowerLeftY + frameBillHeight - QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
 
         stream.beginText();
 
         String title = langText.getZahlteil();
-        drawText(title, leftX, startY, FONT_BOLD, FONT_SIZE_TITLE, stream);
+        float currentY = startY - QrBillDeviceUnit.millimetersToDeviceUnit(6);
+        drawText(title, leftX, currentY, FONT_BOLD, FONT_SIZE_TITLE, stream);
 
         stream.endText();
     }
@@ -133,8 +135,7 @@ public class QrBillPdf {
 
         // draw some helper lines
         //
-        //if (printHelperLines) {
-        if (true) {
+        if (printHelperLines) {
             stream.setStrokingColor(Color.BLUE);
             stream.setLineWidth(0.5f);
 
@@ -142,6 +143,9 @@ public class QrBillPdf {
             drawVerticalLine(x, lowerLeftY, QrBillDeviceUnit.FORM_HEIGHT, stream);
 
             x = lowerLeftX + QrBillDeviceUnit.RECEIPT_WIDTH + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
+            drawVerticalLine(x, lowerLeftY, QrBillDeviceUnit.FORM_HEIGHT, stream);
+
+            x = QrBillDeviceUnit.PAYMENT_COL_2_START;
             drawVerticalLine(x, lowerLeftY, QrBillDeviceUnit.FORM_HEIGHT, stream);
 
             stream.setStrokingColor(Color.BLACK);
@@ -167,15 +171,18 @@ public class QrBillPdf {
     }
 
     private void drawText(String text, float x, float y,
-                          PDSimpleFont font, float size,
+                          PDFont font, float size,
                           PDPageContentStream stream) throws IOException {
-        stream.setFont(FONT_NORMAL, size);
+        stream.setFont(font, size);
         stream.newLineAtOffset(x, y);
         stream.showText(text);
     }
 
     private QrBillLanguage getLanguage(String language) {
         switch (language) {
+            case "EN":
+            case "FR":
+            case "IT":
             case "DE":
                 return langDE;
             default:
