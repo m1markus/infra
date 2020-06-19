@@ -6,8 +6,12 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class QrBillPdf {
@@ -17,6 +21,9 @@ public class QrBillPdf {
     private static final int FONT_SIZE_TITLE = 11;
 
     private static final QrBillLanguageDE langDE = new QrBillLanguageDE();
+
+    private QrBillCodeGenerator qrDataStringGenerator = new QrBillCodeGenerator();
+    private QrBillQrCode qrCodeGenerator = new QrBillQrCode();
 
     // this is to fine tune the starting points depending on the
     //
@@ -71,7 +78,7 @@ public class QrBillPdf {
 
         drawCutLines(frameBillWidth, frameBillHeight, stream, lowerLeftX, lowerLeftY, langText);
         drawReceipt(frameBillHeight, data, stream, lowerLeftX, lowerLeftY, langText);
-        drawPayment(frameBillHeight, data, stream, lowerLeftX, lowerLeftY, langText);
+        drawPayment(frameBillHeight, data, stream, lowerLeftX, lowerLeftY, langText, document);
 
         stream.close();
 
@@ -93,11 +100,31 @@ public class QrBillPdf {
         stream.endText();
     }
 
+    private PDImageXObject convertBufferedImageToPDImageXObject(BufferedImage image,
+                                                                PDDocument document) throws IOException {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(image, "png", baos);
+            baos.flush();
+            byte[] imageInByte = baos.toByteArray();
+            PDImageXObject imageXObj = PDImageXObject.createFromByteArray(document, imageInByte, "qr_code");
+            return imageXObj;
+        }
+    }
+
     private void drawPayment(float frameBillHeight, QrBillData data, PDPageContentStream stream,
-                             float lowerLeftX, float lowerLeftY, QrBillLanguage langText) throws IOException {
+                             float lowerLeftX, float lowerLeftY, QrBillLanguage langText,
+                             PDDocument document) throws IOException {
 
         float leftX = lowerLeftX + QrBillDeviceUnit.RECEIPT_WIDTH + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
         float startY = lowerLeftY + frameBillHeight - QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
+
+        String qrCodeDataString = qrDataStringGenerator.generateStringV2(data);
+        BufferedImage qrCodeImage = qrCodeGenerator.generateQrGraphic(qrCodeDataString);
+        PDImageXObject imageXObj = convertBufferedImageToPDImageXObject(qrCodeImage, document);
+
+        float qrImageWidth = QrBillDeviceUnit.QR_CODE_IMAGE_SIZE;
+        float qrImageHeight = qrImageWidth;
+        stream.drawImage(imageXObj, leftX + 7, 100, qrImageWidth, qrImageHeight);
 
         stream.beginText();
 

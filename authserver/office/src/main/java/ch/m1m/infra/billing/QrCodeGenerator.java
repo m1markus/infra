@@ -1,3 +1,6 @@
+//
+// from: https://www.paymentstandards.ch/dam/downloads/qrcodegenerator.java
+//
 package ch.m1m.infra.billing;
 
 import com.google.zxing.BarcodeFormat;
@@ -60,7 +63,7 @@ public class QrCodeGenerator {
             "\r\n" +
             "123949.75\r\n" +
             "CHF\r\n" +
-            "S\r\n"+
+            "S\r\n" +
             "Pia-Maria Rutschmann-Schnyder\r\n" +
             "Grosse Marktgasse\r\n" +
             "28/5\r\n" +
@@ -94,7 +97,7 @@ public class QrCodeGenerator {
         }
     }
 
-    private BufferedImage generateQrCodeImage(String payload) {
+    public BufferedImage generateQrCodeImage(String payload) {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
@@ -109,7 +112,7 @@ public class QrCodeGenerator {
         return MatrixToImageWriter.toBufferedImage(bitMatrix);
     }
 
-    private BufferedImage overlayWithSwissCross(BufferedImage qrCodeImage) throws IOException {
+    public BufferedImage overlayWithSwissCross(BufferedImage qrCodeImage) throws IOException {
 
         Path swissCrossPath;
         try {
@@ -132,4 +135,3 @@ public class QrCodeGenerator {
     }
 
 }
-
