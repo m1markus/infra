@@ -18,7 +18,7 @@ public class QrBillTestDataGenerator {
 
         // finalReceiver for free
 
-        billData.getPaymentInformation().setAmount(new BigDecimal("199.95"));
+        billData.getPaymentInformation().setAmount(new BigDecimal("1888777199.95"));
         billData.getPaymentInformation().setCurrency("CHF");
 
         billData.getPayer().setType("K");

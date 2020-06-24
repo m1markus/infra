@@ -17,4 +17,10 @@ public class QrBillLanguageDE implements QrBillLanguage {
     public String getReferenz() {
         return "Referenz";
     }
+
+    public String getZahlbarDurch() { return "Zahlbar durch"; }
+
+    public String getWaehrung() { return "Währung"; }
+    public String getBetrag() { return "Betrag"; }
+    public String getAnnahmestelle() { return "Annahmestelle"; }
 }
