@@ -30,3 +30,13 @@ public class RestResource {
                 .body(resource);
     }
 }
+
+/*
+
+to save the pdf:
+content-type: application octet stream
+content-disposition: "attachment; filename="simple.pdf"
+
+
+
+ */
