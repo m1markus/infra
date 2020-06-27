@@ -2,7 +2,10 @@ package ch.m1m.infra.billing;
 
 public class QrBillPaymentReference {
 
-    private String type = "NON";
+    public static String TYPE_NONE = "NON";
+    public static String TYPE_SCOR = "SCOR";
+
+    private String type = TYPE_NONE;
 
     private String reference = "";
 

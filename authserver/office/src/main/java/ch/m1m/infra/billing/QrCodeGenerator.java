@@ -1,6 +1,3 @@
-//
-// from: https://www.paymentstandards.ch/dam/downloads/qrcodegenerator.java
-//
 package ch.m1m.infra.billing;
 
 import com.google.zxing.BarcodeFormat;
@@ -22,6 +19,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+
+//
+// from: https://www.paymentstandards.ch/dam/downloads/qrcodegenerator.java
+//
 
 public class QrCodeGenerator {
 

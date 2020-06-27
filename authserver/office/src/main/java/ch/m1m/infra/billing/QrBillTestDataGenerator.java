@@ -26,7 +26,35 @@ public class QrBillTestDataGenerator {
         billData.getPayer().setStreet("Grosse Marktgasse 28");
         billData.getPayer().setCityName("9400 Rorschach");
 
-        billData.getReference().setType("SCOR");
+        billData.getReference().setType(QrBillPaymentReference.TYPE_SCOR);
+        billData.getReference().setReference("RF18539007547034");
+
+        return billData;
+    }
+
+    public QrBillData generateBillData_priv() {
+        QrBillData billData = new QrBillData();
+
+        billData.getReceiver().setIban("CH5800791123000889012");
+        QrBillAddress receiverAddress = billData.getReceiver().getAddress();
+        receiverAddress.setType("S");
+        receiverAddress.setName("Sandra Mueller");
+        receiverAddress.setStreet("Blumenstrasse");
+        receiverAddress.setHouseNumber("15");
+        receiverAddress.setZipCode("4102");
+        receiverAddress.setCityName("Binningen");
+
+        // finalReceiver for free
+
+        billData.getPaymentInformation().setAmount(new BigDecimal("1.05"));
+        billData.getPaymentInformation().setCurrency("CHF");
+
+        billData.getPayer().setType("K");
+        billData.getPayer().setName("Markus Mueller");
+        billData.getPayer().setStreet("Blumenstrasse 15");
+        billData.getPayer().setCityName("4102 Binningen");
+
+        billData.getReference().setType(QrBillPaymentReference.TYPE_SCOR);
         billData.getReference().setReference("RF18539007547034");
 
         return billData;
