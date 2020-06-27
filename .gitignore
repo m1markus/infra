@@ -12,3 +12,5 @@
 .checkstyle
 .factorypath
 *.launch
+
+node_modules/
