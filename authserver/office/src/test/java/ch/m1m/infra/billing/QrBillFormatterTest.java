@@ -21,4 +21,16 @@ class QrBillFormatterTest {
         // THEN
         assertEquals("9 357.95", result);
     }
+
+    @Test
+    public void givenOneWithoutDecimal_whenFormattingAmount_thenWeGetTwoDecimalZeros() {
+        // GIVEN
+        BigDecimal amount1 = new BigDecimal("1");
+
+        // WHEN
+        String result = format.amount(amount1);
+
+        // THEN
+        assertEquals("1.00", result);
+    }
 }

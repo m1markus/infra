@@ -17,12 +17,12 @@ public class QrBillFormatter {
         return iban.toString();
     }
 
-    // FIXME: amount 1.- not formatted correctly -> 1.00
     String amount(BigDecimal inAmount) {
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
         symbols.setGroupingSeparator(' ');
         formatter.setDecimalFormatSymbols(symbols);
+        formatter.applyPattern("#,###,###,##0.00");
         String formattedAmount = formatter.format(inAmount);
         return formattedAmount;
     }
