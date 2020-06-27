@@ -33,7 +33,7 @@ public class QrBillPdf {
     private float offsetX = 0f;
     private float offsetY = 0f;
 
-    private boolean printHelperLines = true;
+    private boolean printHelperLines = false;
 
     public static void main(String... args) throws IOException {
 
@@ -94,20 +94,18 @@ public class QrBillPdf {
     private void drawReceipt(float frameBillHeight, QrBillData data, PDPageContentStream stream,
                              float lowerLeftX, float lowerLeftY, QrBillLanguage langText) throws IOException {
 
-        final float heightEmptyLine = 11;
-        final float heightDataLine = 10;
+        final float lineSpacing = 9;
         float leftX = lowerLeftX + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
         float startY = lowerLeftY + frameBillHeight - QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
 
         // title: Empangsschein
         //
         String title = langText.getEmpfangsschein();
-        //float currentY = startY - QrBillDeviceUnit.millimetersToDeviceUnit(6);
         float currentHeight = 11;
         float workY = startY - currentHeight;
         drawText2(title, leftX, workY, FONT_BOLD, FONT_SIZE_TITLE, stream);
         // blank line
-        workY -= heightEmptyLine;
+        workY -= lineSpacing;
 
         // title: Konto / Zahlbar an
         //
@@ -120,29 +118,29 @@ public class QrBillPdf {
         //
         String dataIBAN = data.getReceiver().getIban();
         dataIBAN = format.iban(dataIBAN);
-        workY -= heightDataLine;
+        workY -= lineSpacing;
         drawText2(dataIBAN, leftX, workY, FONT_NORMAL, 8, stream);
         //
         // data Name
         //
         List<String> dataAddressList = format.addressToList(data.getReceiver().getAddress());
         String dataLine1 = dataAddressList.get(0);
-        workY -= heightDataLine;
+        workY -= lineSpacing;
         drawText2(dataLine1, leftX, workY, FONT_NORMAL, 8, stream);
         //
         // data Strasse
         //
         String dataLine2 = dataAddressList.get(1);
-        workY -= heightDataLine;
+        workY -= lineSpacing;
         drawText2(dataLine2, leftX, workY, FONT_NORMAL, 8, stream);
         //
         // data Ort
         //
         String dataLine3 = dataAddressList.get(2);
-        workY -= heightDataLine;
+        workY -= lineSpacing;
         drawText2(dataLine3, leftX, workY, FONT_NORMAL, 8, stream);
         // blank line
-        workY -= heightEmptyLine;
+        workY -= lineSpacing;
 
         // title: Referenz (optional)
         //
@@ -151,11 +149,11 @@ public class QrBillPdf {
             title = langText.getReferenz();
             workY -= 6;
             drawText2(title, leftX, workY, FONT_BOLD, 6, stream);
-            workY -= heightDataLine;
+            workY -= lineSpacing;
             String dataRef = ref.getReference();
             drawText2(dataRef, leftX, workY, FONT_NORMAL, 8, stream);
             // blank line
-            workY -= heightEmptyLine;
+            workY -= lineSpacing;
         }
 
         QrBillAddress payer = data.getPayer();
@@ -171,19 +169,19 @@ public class QrBillPdf {
             // adresse line 1
             //
             dataLine1 = dataAddressList.get(0);
-            workY -= heightDataLine;
+            workY -= lineSpacing;
             drawText2(dataLine1, leftX, workY, FONT_NORMAL, 8, stream);
             //
             // adresse line 2
             //
             dataLine2 = dataAddressList.get(1);
-            workY -= heightDataLine;
+            workY -= lineSpacing;
             drawText2(dataLine2, leftX, workY, FONT_NORMAL, 8, stream);
             //
             // adresse line 3
             //
             dataLine3 = dataAddressList.get(2);
-            workY -= heightDataLine;
+            workY -= lineSpacing;
             drawText2(dataLine3, leftX, workY, FONT_NORMAL, 8, stream);
         }
 
@@ -196,7 +194,7 @@ public class QrBillPdf {
         drawText2(title, leftX, workY, FONT_BOLD, 6, stream);
         title = langText.getBetrag();
         drawText2(title, leftAmountX, workY, FONT_BOLD, 6, stream);
-        workY -= heightDataLine;
+        workY -= 11;
         String dataCurrencyCode = data.getPaymentInformation().getCurrency();
         drawText2(dataCurrencyCode, leftX, workY, FONT_NORMAL, 8, stream);
         BigDecimal dataAmount = data.getPaymentInformation().getAmount();
@@ -226,24 +224,137 @@ public class QrBillPdf {
                              float lowerLeftX, float lowerLeftY, QrBillLanguage langText,
                              PDDocument document) throws IOException {
 
+        final float lineSpacing = 11;
         float leftX = lowerLeftX + QrBillDeviceUnit.RECEIPT_WIDTH + QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
         float startY = lowerLeftY + frameBillHeight - QrBillDeviceUnit.MARGIN_NON_PRINTABLE;
+        float leftCol1X = leftX;
+        float leftCol2X = leftX + QrBillDeviceUnit.millimetersToDeviceUnit(51);
 
+        // title: Zahlteil
+        //
+        String title = langText.getZahlteil();
+        float currentHeight = lineSpacing;
+        float workY = startY - currentHeight;
+        drawText2(title, leftCol1X, workY, FONT_BOLD, FONT_SIZE_TITLE, stream);
+        //
+        // Konto / Zahlbar an
+        //
+        title = langText.getKontoZahlbarAn();
+        workY += 3;
+        drawText2(title, leftCol2X, workY, FONT_BOLD, 8, stream);
+        //
+        // IBAN
+        //
+        String dataIBAN = data.getReceiver().getIban();
+        dataIBAN = format.iban(dataIBAN);
+        workY -= lineSpacing;
+        drawText2(dataIBAN, leftCol2X, workY, FONT_NORMAL, 10, stream);
+        //
+        // Receiver Address 1
+        //
+        List<String> dataAddressList = format.addressToList(data.getReceiver().getAddress());
+        String dataLine1 = dataAddressList.get(0);
+        workY -= lineSpacing;
+        drawText2(dataLine1, leftCol2X, workY, FONT_NORMAL, 10, stream);
+        //
+        // Receiver Address 2
+        //
+        String dataLine2 = dataAddressList.get(1);
+        workY -= lineSpacing;
+        drawText2(dataLine2, leftCol2X, workY, FONT_NORMAL, 10, stream);
+        //
+        // Receiver Address 3
+        //
+        String dataLine3 = dataAddressList.get(2);
+        workY -= lineSpacing;
+        drawText2(dataLine3, leftCol2X, workY, FONT_NORMAL, 10, stream);
+        // blank line
+        workY -= lineSpacing;
+
+        // title: Referenz (optional)
+        //
+        QrBillPaymentReference ref = data.getReference();
+        if (!QrBillPaymentReference.TYPE_NONE.equals(ref.getType())) {
+            title = langText.getReferenz();
+            workY -= lineSpacing;
+            drawText2(title, leftCol2X, workY, FONT_BOLD, 8, stream);
+            workY -= lineSpacing;
+            String dataRef = ref.getReference();
+            drawText2(dataRef, leftCol2X, workY, FONT_NORMAL, 10, stream);
+            // blank line
+            workY -= lineSpacing;
+        }
+
+        // title: Zusätzliche Informationen (optional)
+        //
+        // ...
+
+        // title: Zahlbar durch
+        //
+        QrBillAddress payer = data.getPayer();
+        if (payer != null) {
+            dataAddressList = format.addressToList(payer);
+            //
+            // title: Zahlbar durch
+            //
+            title = langText.getZahlbarDurch();
+            workY -= lineSpacing;
+            drawText2(title, leftCol2X, workY, FONT_BOLD, 8, stream);
+            //
+            // adresse line 1
+            //
+            dataLine1 = dataAddressList.get(0);
+            workY -= lineSpacing;
+            drawText2(dataLine1, leftCol2X, workY, FONT_NORMAL, 10, stream);
+            //
+            // adresse line 2
+            //
+            dataLine2 = dataAddressList.get(1);
+            workY -= lineSpacing;
+            drawText2(dataLine2, leftCol2X, workY, FONT_NORMAL, 10, stream);
+            //
+            // adresse line 3
+            //
+            dataLine3 = dataAddressList.get(2);
+            workY -= lineSpacing;
+            drawText2(dataLine3, leftCol2X, workY, FONT_NORMAL, 10, stream);
+            // blank line
+            workY -= lineSpacing;
+        }
+
+        //
+        // QR Code
+        //
         String qrCodeDataString = qrDataStringGenerator.generateStringV2(data);
         BufferedImage qrCodeImage = qrCodeGenerator.generateQrGraphic(qrCodeDataString);
         PDImageXObject imageXObj = convertBufferedImageToPDImageXObject(qrCodeImage, document);
-
+        // draw QR code
         float qrImageWidth = QrBillDeviceUnit.QR_CODE_IMAGE_SIZE;
         float qrImageHeight = qrImageWidth;
-        stream.drawImage(imageXObj, leftX + 7, 100, qrImageWidth, qrImageHeight);
+        float qrY = QrBillDeviceUnit.millimetersToDeviceUnit(5 + 18 + 14 + 5);
+        stream.drawImage(imageXObj, leftX, qrY, qrImageWidth, qrImageHeight);
 
-        stream.beginText();
+        // area: Betrag
+        //
+        //float qrWidth = QrBillDeviceUnit.millimetersToDeviceUnit(46);
+        //drawHorizontalLine(leftX, workY, qrWidth, stream);
 
-        String title = langText.getZahlteil();
-        float currentY = startY - QrBillDeviceUnit.millimetersToDeviceUnit(6);
-        drawText(title, leftX, currentY, FONT_BOLD, FONT_SIZE_TITLE, stream);
+        float leftAmountX = leftX + QrBillDeviceUnit.millimetersToDeviceUnit(15);
+        float amountY = lowerLeftY + QrBillDeviceUnit.MARGIN_NON_PRINTABLE + QrBillDeviceUnit.millimetersToDeviceUnit(18 + 14);
+        workY = amountY -= 8;
+        title = langText.getWaehrung();
+        drawText2(title, leftX, workY, FONT_BOLD, 8, stream);
+        title = langText.getBetrag();
+        drawText2(title, leftAmountX, workY, FONT_BOLD, 8, stream);
+        workY -= lineSpacing;
+        String dataCurrencyCode = data.getPaymentInformation().getCurrency();
+        drawText2(dataCurrencyCode, leftX, workY, FONT_NORMAL, 10, stream);
+        BigDecimal dataAmount = data.getPaymentInformation().getAmount();
+        String dataAmountFormatted = format.amount(dataAmount);
+        drawText2(dataAmountFormatted, leftAmountX, workY, FONT_NORMAL, 10, stream);
 
-        stream.endText();
+        // area: Weitere Informationen
+        //
     }
 
     private void drawCutLines(float frameBillWidth, float frameBillHeight, PDPageContentStream stream,
@@ -298,6 +409,13 @@ public class QrBillPdf {
         drawText(cutText, textX, textY, FONT_NORMAL, 10, stream);
         stream.endText();
 
+        stream.stroke();
+    }
+
+    private void drawHorizontalLine(float x, float y, float width, PDPageContentStream stream) throws IOException {
+        stream.moveTo(x, y);
+        float rightX = x + width;
+        stream.lineTo(rightX, y);
         stream.stroke();
     }
 

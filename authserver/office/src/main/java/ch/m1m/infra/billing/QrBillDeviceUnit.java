@@ -15,8 +15,6 @@ public class QrBillDeviceUnit {
 
     public static final float PAYMENT_COL_2_START = RECEIPT_WIDTH + MARGIN_NON_PRINTABLE + millimetersToDeviceUnit(51);
 
-    public static final float TITLE_HEIGHT = millimetersToDeviceUnit(7);
-
     public static final float QR_CODE_IMAGE_SIZE = millimetersToDeviceUnit(46);
 
     public static float millimetersToDeviceUnit(float millimeters) {
