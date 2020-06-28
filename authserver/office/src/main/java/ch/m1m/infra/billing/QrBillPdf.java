@@ -16,6 +16,11 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
+// https://www.paymentstandards.ch/dam/downloads/style-guide-de.pdf
+//
+// https://www.paymentstandards.ch/dam/downloads/ig-qr-bill-de.pdf
+//
+
 public class QrBillPdf {
 
     private static final PDFont FONT_NORMAL = PDType1Font.HELVETICA;
