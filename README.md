@@ -1,3 +1,3 @@
 # infra
 
-Just a view projects.
+Just a view simple projects.
