@@ -2,10 +2,8 @@ package ch.m1m.script;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
@@ -50,20 +48,22 @@ public class RuntimeScriptExecutor {
         Class<?> scriptClass = compileOrLoadClass(script);
         Object scriptInstance = scriptClass.getDeclaredConstructor().newInstance();
 
-        // build class list
-        List<Class<?>> listParamClass = new ArrayList<>();
-        listParamClass.add(RuntimeScriptContext.class);
+        // build class and value arrays
+        //
+        int arrayLen = vArgValues.length + 1;
+        Class[] arrParamClass = new Class[arrayLen];
+        arrParamClass[0] = RuntimeScriptContext.class;
 
-        List<Object> listParamValues = new ArrayList<>();
-        listParamValues.add(ctx);
+        Object[] arrParamValues = new Object[arrayLen];
+        arrParamValues[0] = ctx;
 
-        for(int i=0; i < vArgValues.length; i++) {
-            listParamClass.add(vArgValues[i].getClass());
-            listParamValues.add(vArgValues[i]);
+        for(int si=0, ti=1; si < vArgValues.length; si++, ti++) {
+            arrParamClass[ti] = vArgValues[si].getClass();
+            arrParamValues[ti] = vArgValues[si];
         }
 
-        Method scriptMethodExecute = scriptClass.getDeclaredMethod(method, listParamClass.toArray(new Class[0]));
-        return scriptMethodExecute.invoke(scriptInstance, listParamValues.toArray(new Object[0]));
+        Method scriptMethodExecute = scriptClass.getDeclaredMethod(method, arrParamClass);
+        return scriptMethodExecute.invoke(scriptInstance, arrParamValues);
     }
 
     private Class<?> compileOrLoadClass(StringJavaFileObject script) throws IOException, ClassNotFoundException {
