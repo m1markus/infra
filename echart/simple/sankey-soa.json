@@ -1,0 +1,37 @@
+{"nodes":[
+    {"name":"in Portal"},
+    {"name":"in Syrius"},
+    {"name":"in Outlook-Plugin"},
+    {"name":"soa SOA-1.0"},
+    {"name":"soa office-gateway"},
+    {"name":"soa syrius-gateway"},
+    {"name":"soa syrius-facade"},
+    {"name":"soa portal-gateway"},
+    {"name":"soa filenet-facade"},
+    {"name":"soa c4-facade"},
+    {"name":"out C4"},
+    {"name":"out Swisscom-Printing"},
+    {
+        "name":"out Syrius",
+        "itemStyle": {
+            "color": "#efa835",
+            "borderColor": "#efa835"
+        }
+    },
+    {"name":"out Filenet"}
+    ],
+"links":[
+    {"source": "in Portal", "target": "soa portal-gateway",  "value": 10},
+    {"source": "in Portal", "target": "soa syrius-facade",  "value": 10},
+    {"source": "in Outlook-Plugin", "target": "soa office-gateway",  "value": 10},
+    {"source": "soa office-gateway", "target": "soa filenet-facade",  "value": 10},
+    {"source": "in Syrius", "target": "soa syrius-gateway",  "value": 10},
+    {"source": "soa portal-gateway", "target": "soa filenet-facade",  "value": 10},
+    {"source": "soa c4-facade", "target": "out C4",  "value": 10},
+    {"source": "soa syrius-facade", "target": "out Syrius",  "value": 10},
+    {"source": "soa syrius-gateway", "target": "soa c4-facade",  "value": 10},
+    {"source": "soa syrius-gateway", "target": "soa filenet-facade",  "value": 10},
+    {"source": "soa syrius-gateway", "target": "soa SOA-1.0",  "value": 10},
+    {"source": "soa SOA-1.0", "target": "out Swisscom-Printing",  "value": 10},
+    {"source": "soa filenet-facade", "target": "out Filenet",  "value": 10}
+]}
