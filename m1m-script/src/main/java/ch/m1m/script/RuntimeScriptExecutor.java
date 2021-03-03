@@ -47,11 +47,11 @@ public class RuntimeScriptExecutor {
             throws Exception {
 
         Object rcObj;
-        Class scriptClass = compileOrLoadClass(script);
+        Class<?> scriptClass = compileOrLoadClass(script);
         Object scriptInstance = scriptClass.getDeclaredConstructor().newInstance();
 
         // build class list
-        List<Class> listParamClass = new ArrayList<>();
+        List<Class<?>> listParamClass = new ArrayList<>();
         listParamClass.add(RuntimeScriptContext.class);
 
         List<Object> listParamValues = new ArrayList<>();
@@ -66,8 +66,8 @@ public class RuntimeScriptExecutor {
         return scriptMethodExecute.invoke(scriptInstance, listParamValues.toArray(new Object[0]));
     }
 
-    private Class compileOrLoadClass(StringJavaFileObject script) throws IOException, ClassNotFoundException {
-        Class scriptClass = null;
+    private Class<?> compileOrLoadClass(StringJavaFileObject script) throws IOException, ClassNotFoundException {
+        Class<?> scriptClass = null;
         try {
             scriptClass = Class.forName(script.getScriptName(), true, classLoader);
         } catch (ClassNotFoundException e) {
@@ -79,8 +79,7 @@ public class RuntimeScriptExecutor {
 
     private void compileStringJavaFileObject(StringJavaFileObject script) throws IOException {
         JavaFileManager fileManager = new MemJavaFileManager(compiler, classLoader);
-        JavaFileObject javaFile = script;
-        Collection<JavaFileObject> units = Collections.singleton(javaFile);
+        Collection<JavaFileObject> units = Collections.singleton(script);
         JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, null, null, null, units);
         boolean success = task.call();
         if (!success) {
