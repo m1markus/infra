@@ -70,6 +70,21 @@ class MemClassLoaderTest {
     }
 
     @Test
+    public void givenAValidScript_whenExecutingWithArgs_thenWeGetAExitStatusOfSuccess() throws Exception {
+        // GIVEN
+        RuntimeScriptExecutor runtimeScript = new RuntimeScriptExecutor();
+        StringJavaFileObject script = getValidScript_with_different_arguments();
+        RuntimeScriptContext ctx = new RuntimeScriptContext();
+
+        // WHEN
+        Integer rc = (Integer) runtimeScript.call(script, "execute", ctx, "90",  Integer.valueOf(9));
+
+        // THEN
+        assertEquals(99, rc);
+        assertEquals(99, ctx.getExitStatus());
+    }
+
+    @Test
     public void givenAScriptThatCanNotCompile_whenExecuting_thenWeGetARuntimeException() throws Exception {
         // GIVEN
         RuntimeScriptExecutor runtimeScript = new RuntimeScriptExecutor();
@@ -118,6 +133,21 @@ class MemClassLoaderTest {
                 "    }",
                 "}");
         return new StringJavaFileObject("MyScriptCtx", MyScriptCtx);
+    }
+
+    private StringJavaFileObject getValidScript_with_different_arguments() {
+        String MyScriptArgs = String.join("\n",
+                "",
+                "import ch.m1m.script.RuntimeScriptContext;",
+                "public class MyScriptArgs {",
+                "    public Integer execute(RuntimeScriptContext ctx, String s1, Integer i1) {",
+                "         System.out.println(\"hello v1.0.0 with arguments\");",
+                "         int rc = Integer.parseInt(s1) + i1;",
+                "         ctx.setExitStatus(rc);",
+                "         return Integer.valueOf(rc);",
+                "    }",
+                "}");
+        return new StringJavaFileObject("MyScriptArgs", MyScriptArgs);
     }
 
     private StringJavaFileObject getInvalidScript_that_does_not_compile() {
