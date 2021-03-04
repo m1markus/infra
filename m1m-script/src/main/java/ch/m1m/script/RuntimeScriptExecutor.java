@@ -82,10 +82,10 @@ public class RuntimeScriptExecutor {
         Collection<JavaFileObject> units = Collections.singleton(script);
         JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, null, null, null, units);
         boolean success = task.call();
+        fileManager.close();
         if (!success) {
             String errMessage = String.format("Failed to compile script: %s", script.getScriptName());
             throw new RuntimeException(errMessage);
         }
-        fileManager.close();
     }
 }
