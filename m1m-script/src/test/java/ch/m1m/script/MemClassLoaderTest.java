@@ -2,6 +2,8 @@ package ch.m1m.script;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -12,13 +14,17 @@ import javax.tools.ToolProvider;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MemClassLoaderTest {
 
-    boolean useSingleExecutor = true;
-    private RuntimeScriptExecutor singleExecutor = new RuntimeScriptExecutor();
+    private static final Logger LOG = LoggerFactory.getLogger(MemClassLoaderTest.class);
+
+    private final boolean useSingleExecutor = true;
+    private final RuntimeScriptExecutor singleExecutor = new RuntimeScriptExecutor();
 
     // http://openbook.rheinwerk-verlag.de/java7/1507_19_002.html
     //
@@ -44,7 +50,9 @@ class MemClassLoaderTest {
 
         // WHEN
         // THEN
-        runtimeScript.call(script, "execute");
+        for (int i = 0; i < 1; i++) {
+            runtimeScript.call(script, "execute");
+        }
     }
 
     @Test
@@ -55,7 +63,9 @@ class MemClassLoaderTest {
 
         // WHEN
         // THEN
-        runtimeScript.call(script, "execute");
+        for (int i = 0; i < 1; i++) {
+            runtimeScript.call(script, "execute");
+        }
     }
 
     @Test
@@ -66,7 +76,9 @@ class MemClassLoaderTest {
         RuntimeScriptContext ctx = new RuntimeScriptContext();
 
         // WHEN
-        runtimeScript.call(script, "execute", ctx);
+        for (int i = 0; i < 1; i++) {
+            runtimeScript.call(script, "execute", ctx);
+        }
 
         // THEN
         assertEquals(0, ctx.getExitStatus());
@@ -80,7 +92,10 @@ class MemClassLoaderTest {
         RuntimeScriptContext ctx = new RuntimeScriptContext();
 
         // WHEN
-        Integer rc = (Integer) runtimeScript.call(script, "execute", ctx, "90",  Integer.valueOf(9));
+        Integer rc = 0;
+        for (int i = 0; i < 1; i++) {
+            rc = (Integer) runtimeScript.call(script, "execute", ctx, "90", Integer.valueOf(9));
+        }
 
         // THEN
         assertEquals(99, rc);
@@ -100,6 +115,27 @@ class MemClassLoaderTest {
 
         // THEN
         assertEquals("Failed to compile script: MyScriptDoesNotCompile", error.getMessage());
+    }
+
+    @Test
+    public void measure_the_time_for_normal_method_calls() {
+
+        class TestPerformance {
+            public Object execute() {
+                //System.out.println("nothing special");
+                return null;
+            }
+        }
+
+        for (int i = 0; i < 1; i++) {
+            Instant start = Instant.now();
+
+            TestPerformance tp = new TestPerformance();
+            tp.execute();
+
+            String timeSpend = Duration.between(start, Instant.now()).toString();
+            LOG.info("Called execute() on new TestPerformance instance in: {}", timeSpend);
+        }
     }
 
     private StringJavaFileObject getValidScript_with_no_package_execute_no_args() {
