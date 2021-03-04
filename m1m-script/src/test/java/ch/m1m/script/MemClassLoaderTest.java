@@ -17,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MemClassLoaderTest {
 
+    boolean useSingleExecutor = true;
+    private RuntimeScriptExecutor singleExecutor = new RuntimeScriptExecutor();
+
     // http://openbook.rheinwerk-verlag.de/java7/1507_19_002.html
     //
     @Test
@@ -36,7 +39,7 @@ class MemClassLoaderTest {
     @Test
     public void givenAValidScript_whenExecutingWithoutCtx_thenWeGetNoException() throws Exception {
         // GIVEN
-        RuntimeScriptExecutor runtimeScript = new RuntimeScriptExecutor();
+        RuntimeScriptExecutor runtimeScript = getRuntimeScriptExecutor();
         StringJavaFileObject script = getValidScript_with_no_package_execute_no_args();
 
         // WHEN
@@ -47,7 +50,7 @@ class MemClassLoaderTest {
     @Test
     public void givenAValidScriptWithPackageName_whenExecutingWithoutCtx_thenWeGetNoException() throws Exception {
         // GIVEN
-        RuntimeScriptExecutor runtimeScript = new RuntimeScriptExecutor();
+        RuntimeScriptExecutor runtimeScript = getRuntimeScriptExecutor();
         StringJavaFileObject script = getValidScript_with_package_execute_no_args();
 
         // WHEN
@@ -58,7 +61,7 @@ class MemClassLoaderTest {
     @Test
     public void givenAValidScript_whenExecutingWithCtx_thenWeGetAExitStatusOfSuccess() throws Exception {
         // GIVEN
-        RuntimeScriptExecutor runtimeScript = new RuntimeScriptExecutor();
+        RuntimeScriptExecutor runtimeScript = getRuntimeScriptExecutor();
         StringJavaFileObject script = getValidScript_with_no_package_execute_with_context();
         RuntimeScriptContext ctx = new RuntimeScriptContext();
 
@@ -72,7 +75,7 @@ class MemClassLoaderTest {
     @Test
     public void givenAValidScript_whenExecutingWithArgs_thenWeGetAExitStatusOfSuccess() throws Exception {
         // GIVEN
-        RuntimeScriptExecutor runtimeScript = new RuntimeScriptExecutor();
+        RuntimeScriptExecutor runtimeScript = getRuntimeScriptExecutor();
         StringJavaFileObject script = getValidScript_with_different_arguments();
         RuntimeScriptContext ctx = new RuntimeScriptContext();
 
@@ -87,7 +90,7 @@ class MemClassLoaderTest {
     @Test
     public void givenAScriptThatCanNotCompile_whenExecuting_thenWeGetARuntimeException() throws Exception {
         // GIVEN
-        RuntimeScriptExecutor runtimeScript = new RuntimeScriptExecutor();
+        RuntimeScriptExecutor runtimeScript = getRuntimeScriptExecutor();
         StringJavaFileObject script = getInvalidScript_that_does_not_compile();
 
         // WHEN
@@ -152,5 +155,12 @@ class MemClassLoaderTest {
 
     private StringJavaFileObject getInvalidScript_that_does_not_compile() {
         return new StringJavaFileObject("MyScriptDoesNotCompile", "public class does_not_compile");
+    }
+
+    private RuntimeScriptExecutor getRuntimeScriptExecutor() {
+        if (useSingleExecutor) {
+            return singleExecutor;
+        }
+        return new RuntimeScriptExecutor();
     }
 }
