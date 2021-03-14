@@ -23,8 +23,8 @@ class MemClassLoaderTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MemClassLoaderTest.class);
 
-    private final boolean useSingleExecutor = true;
-    private final RuntimeScriptExecutor singleExecutor = new RuntimeScriptExecutor();
+    private static final boolean useSingleExecutor = true;
+    private static final RuntimeScriptExecutor singleExecutor = new RuntimeScriptExecutor();
 
     // http://openbook.rheinwerk-verlag.de/java7/1507_19_002.html
     //
