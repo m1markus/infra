@@ -23,7 +23,7 @@
         15.0.4     downgrade does not work -> delete all vaadin web files first
     ***	14.1.25
         -->
-        <vaadin.version>14.1.25</vaadin.version>
+        <vaadin.version>19.0.6</vaadin.version>
         <apacheds.version>2.0.0.AM26</apacheds.version>
         <unboundid-ldapsdk.version>4.0.9</unboundid-ldapsdk.version>
     </properties>
