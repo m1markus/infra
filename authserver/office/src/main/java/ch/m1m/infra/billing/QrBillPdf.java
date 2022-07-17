@@ -54,7 +54,8 @@ public class QrBillPdf {
         String language = "DE";
 
         //QrBillData data = testData.generateBillData_case_1();
-        QrBillData data = testData.generateBillData_priv();
+        //QrBillData data = testData.generateBillData_priv();
+        QrBillData data = testData.generateBillData_mieterReinach();
 
         PDDocument document = bill.generateDocument(data, language);
 

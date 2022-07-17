@@ -57,4 +57,32 @@ public class QrBillTestDataGenerator {
 
         return billData;
     }
+
+    public QrBillData generateBillData_mieterReinach() {
+        QrBillData billData = new QrBillData();
+
+        billData.getReceiver().setIban("CH6500769436015282001");
+        QrBillAddress receiverAddress = billData.getReceiver().getAddress();
+        receiverAddress.setType("S");
+        receiverAddress.setName("M. Müller & B. Rufener");
+        receiverAddress.setStreet("Blumenstrasse");
+        receiverAddress.setHouseNumber("15");
+        receiverAddress.setZipCode("4102");
+        receiverAddress.setCityName("Binningen");
+
+        // finalReceiver for free
+
+        billData.getPaymentInformation().setAmount(new BigDecimal("1770.00"));
+        billData.getPaymentInformation().setCurrency("CHF");
+
+        billData.getPayer().setType("K");
+        billData.getPayer().setName("N. Lazarevic / M. Leuthardt");
+        billData.getPayer().setStreet("Habshagstrasse 6");
+        billData.getPayer().setCityName("4153 Reinach");
+
+        // billData.getReference().setType(QrBillPaymentReference.TYPE_SCOR);
+        // billData.getReference().setReference("RF18539007547034");
+
+        return billData;
+    }
 }
