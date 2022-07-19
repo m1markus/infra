@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.time.Duration;
 import java.time.LocalTime;
 
 @ApplicationScoped
@@ -36,26 +35,11 @@ public class StateManager {
     private SprinklerAppState initFromStaticConfig() {
         SprinklerAppState sprinklerAppState = new SprinklerAppState();
         sprinklerAppState.setActive(true);
-        WaterPipe waterPipe = newWaterPipe(1);
-
+        WaterPipe waterPipe = WaterPipeCreator.newWaterPipe(1, LocalTime.of(18, 00), 240);
+        sprinklerAppState.getPipes().add(waterPipe);
+        waterPipe = WaterPipeCreator.newWaterPipe(2, LocalTime.of(00, 01), 60);
         sprinklerAppState.getPipes().add(waterPipe);
         return sprinklerAppState;
-    }
-
-    private WaterPipe newWaterPipe(int id) {
-        WaterPipe waterPipe = new WaterPipe();
-        waterPipe.setId(1);
-        waterPipe.setActive(true);
-        waterPipe.setStartAt(LocalTime.of(22, 00));
-        waterPipe.setRunFor(Duration.ofMinutes(120));
-        waterPipe.setRunOnMonday(true);
-        waterPipe.setRunOnTuesday(true);
-        waterPipe.setRunOnWednesday(true);
-        waterPipe.setRunOnThursday(true);
-        waterPipe.setRunOnFriday(true);
-        waterPipe.setRunOnSaturday(true);
-        waterPipe.setRunOnSunday(true);
-        return waterPipe;
     }
 
     public SprinklerAppState getSprinklerAppState() {

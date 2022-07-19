@@ -5,6 +5,10 @@ public class WaterPipeState {
     private int id;
     private boolean flow;
 
+    public WaterPipeState(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }
