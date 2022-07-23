@@ -25,6 +25,9 @@ public class StateManager {
     @Inject
     SprinklerStateEvaluator sprinklerStateEvaluator;
 
+    @Inject
+    GpioSprinkler gpioSprinkler;
+
     @PostConstruct
     public void onInit() {
         LOG.info("initialize global state...");
@@ -53,6 +56,8 @@ public class StateManager {
     public void updatePipeState() {
 
         SprinklerState newSprinklerState = sprinklerStateEvaluator.evaluate(sprinklerAppState);
+
+        gpioSprinkler.activate();
 
         // replace the old value
         sprinklerState = newSprinklerState;
