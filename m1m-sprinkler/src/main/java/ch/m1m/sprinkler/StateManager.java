@@ -31,7 +31,6 @@ public class StateManager {
     @PostConstruct
     public void onInit() {
         LOG.info("initialize global state...");
-
         sprinklerAppState = initFromStaticConfig();
     }
 
