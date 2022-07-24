@@ -65,7 +65,7 @@ public class GpioSprinkler {
     public void activate() {
         LOG.info("called Gpio...activate()");
         if (isOnRealPi) {
-            led1.toggle();
+            led1.high();
         } else {
             LOG.info("fake led-1 toggle()");
         }
