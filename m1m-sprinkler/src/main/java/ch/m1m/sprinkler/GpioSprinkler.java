@@ -28,7 +28,7 @@ public class GpioSprinkler {
     public GpioSprinkler() {
         try {
             gpio = GpioFactory.getInstance();
-            led1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27, "Led-1", PinState.LOW);
+            led1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23, "Led-1", PinState.LOW);
 
         } catch (UnsatisfiedLinkError e) {
             isOnRealPi = false;
