@@ -36,7 +36,7 @@ public class BackgroundExecutor implements Runnable {
 
     public void run() {
         while (isRunning.get()) {
-            LOG.info("executing run() from background thread, stateManager is" + stateManager);
+            LOG.info("executing run() from background thread, stateManager is: " + stateManager);
             try {
                 stateManager.updatePipeState();
                 TimeUnit.SECONDS.sleep(1);
