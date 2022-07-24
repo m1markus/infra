@@ -23,12 +23,19 @@ public class GpioSprinkler {
     private boolean isOnRealPi = true;
 
     private GpioController gpio;
+
+    private String d1Name = "Led-1";
     private GpioPinDigitalOutput led1;
 
     public GpioSprinkler() {
         try {
             gpio = GpioFactory.getInstance();
-            led1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23, "Led-1", PinState.LOW);
+            LOG.info("gpio calling getProvisionedPin() " + d1Name + " ...");
+            led1 = (GpioPinDigitalOutput) gpio.getProvisionedPin(d1Name);
+            LOG.info("gpio getProvisionedPin() returned " + led1);
+            LOG.info("gpio calling provisionDigitalOutputPin() " + d1Name);
+            led1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23, d1Name, PinState.LOW);
+            LOG.info("gpio provisionDigitalOutputPin() returned " + led1);
 
         } catch (UnsatisfiedLinkError e) {
             isOnRealPi = false;
@@ -47,6 +54,7 @@ public class GpioSprinkler {
         if (isOnRealPi) {
             LOG.info("calling gpio.shutdown()");
             gpio.shutdown();
+            gpio.unprovisionPin(led1);
         } else {
             LOG.info("fake gpio.shutdown()");
         }
