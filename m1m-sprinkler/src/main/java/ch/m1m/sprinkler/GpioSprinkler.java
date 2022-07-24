@@ -33,9 +33,11 @@ public class GpioSprinkler {
             LOG.info("gpio calling getProvisionedPin() " + d1Name + " ...");
             led1 = (GpioPinDigitalOutput) gpio.getProvisionedPin(d1Name);
             LOG.info("gpio getProvisionedPin() returned " + led1);
-            LOG.info("gpio calling provisionDigitalOutputPin() " + d1Name);
-            led1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23, d1Name, PinState.LOW);
-            LOG.info("gpio provisionDigitalOutputPin() returned " + led1);
+            if (led1 == null) {
+                LOG.info("gpio calling provisionDigitalOutputPin() " + d1Name);
+                led1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23, d1Name, PinState.LOW);
+                LOG.info("gpio provisionDigitalOutputPin() returned " + led1);
+            }
 
         } catch (UnsatisfiedLinkError e) {
             isOnRealPi = false;
