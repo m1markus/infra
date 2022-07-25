@@ -1,6 +1,10 @@
 # m1m-sprinkler Project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project uses Quarkus.
+The GPIO are accessed with pi4j v1.3 see https://pi4j.com/1.3/index.html
+Take also the pin layout from the docu there (it's not the pi sequential number nor the BMC numbers)
+
+The final JAR file needs root permission to access the pins !!!
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
