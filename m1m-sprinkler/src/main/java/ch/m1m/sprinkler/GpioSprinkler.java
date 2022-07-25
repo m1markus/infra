@@ -5,6 +5,7 @@ import io.quarkus.runtime.ShutdownEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 
@@ -28,6 +29,12 @@ public class GpioSprinkler {
     private GpioPinDigitalOutput led1;
 
     public GpioSprinkler() {
+        LOG.info("gpio ctor()...");
+    }
+
+    @PostConstruct
+    public void onInit() {
+        LOG.info("gpio onInit()...");
         try {
             gpio = GpioFactory.getInstance();
             LOG.info("gpio calling getProvisionedPin() " + d1Name + " ...");
@@ -35,7 +42,7 @@ public class GpioSprinkler {
             LOG.info("gpio getProvisionedPin() returned " + led1);
             if (led1 == null) {
                 LOG.info("gpio calling provisionDigitalOutputPin() " + d1Name);
-                led1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23, d1Name, PinState.LOW);
+                led1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_04, d1Name, PinState.LOW);
                 LOG.info("gpio provisionDigitalOutputPin() returned " + led1);
             }
 
@@ -65,7 +72,7 @@ public class GpioSprinkler {
     public void activate() {
         LOG.info("called Gpio...activate()");
         if (isOnRealPi) {
-            led1.high();
+            led1.toggle();
         } else {
             LOG.info("fake led-1 toggle()");
         }
