@@ -14,8 +14,12 @@ public class AppLifecycleBean {
 
     private static Logger LOG = LoggerFactory.getLogger(AppLifecycleBean.class);
 
-    void onStart(@Observes StartupEvent event) {
+    void onStart(@Observes StartupEvent event, AppConfig appConfig) {
+
+        appConfig.setDataDirectory("/tmp");
+
         LOG.info("The application is starting...");
+        LOG.info("config DataDirectory is {}", appConfig.getDataDirectory());
     }
 
     void onStop(@Observes ShutdownEvent event) {
