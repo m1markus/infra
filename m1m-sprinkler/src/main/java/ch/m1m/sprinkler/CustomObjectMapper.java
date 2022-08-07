@@ -19,5 +19,7 @@ public class CustomObjectMapper implements ObjectMapperCustomizer {
         mapper.registerModule(new JavaTimeModule());
         // activate pretty print
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        // to get "PT30S" for type Duration
+        mapper.disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS);
     }
 }
