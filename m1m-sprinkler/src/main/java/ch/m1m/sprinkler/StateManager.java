@@ -92,7 +92,7 @@ public class StateManager {
 
         SprinklerState newSprinklerState = sprinklerStateEvaluator.evaluate(sprinklerAppState);
 
-        gpioSprinkler.activate();
+        gpioSprinkler.evaluateAndSetPins(newSprinklerState);
 
         // replace the old value
         sprinklerState = newSprinklerState;
