@@ -27,10 +27,7 @@ public class GpioSprinkler {
 
     private GpioController gpio;
 
-    private String d1Name = "Led-1";
     private GpioPinDigitalOutput led1;
-
-    private String d2Name = "Led-2";
     private GpioPinDigitalOutput led2;
 
     public GpioSprinkler() {
@@ -43,8 +40,8 @@ public class GpioSprinkler {
         try {
             gpio = GpioFactory.getInstance();
 
-            led1 = provisionPiPin(d1Name, RaspiPin.GPIO_04);
-            led2 = provisionPiPin(d2Name, RaspiPin.GPIO_05);
+            led1 = provisionPiPin("Led-1", RaspiPin.GPIO_04);
+            led2 = provisionPiPin("Led-2", RaspiPin.GPIO_05);
 
         } catch (UnsatisfiedLinkError e) {
             isOnRealPi = false;
@@ -54,14 +51,14 @@ public class GpioSprinkler {
         }
     }
 
-    private GpioPinDigitalOutput provisionPiPin(String d1Name, Pin piPin) {
+    private GpioPinDigitalOutput provisionPiPin(String pinName, Pin piPin) {
         GpioPinDigitalOutput pin;
-        LOG.info("gpio calling getProvisionedPin() " + d1Name + " ...");
-        pin = (GpioPinDigitalOutput) gpio.getProvisionedPin(d1Name);
+        LOG.info("gpio calling getProvisionedPin() " + pinName + " ...");
+        pin = (GpioPinDigitalOutput) gpio.getProvisionedPin(pinName);
         LOG.info("gpio getProvisionedPin() returned " + led1);
         if (pin == null) {
-            LOG.info("gpio calling provisionDigitalOutputPin() " + d1Name);
-            pin = gpio.provisionDigitalOutputPin(piPin, d1Name, PinState.LOW);
+            LOG.info("gpio calling provisionDigitalOutputPin() " + pinName);
+            pin = gpio.provisionDigitalOutputPin(piPin, pinName, PinState.LOW);
             LOG.info("gpio provisionDigitalOutputPin() returned " + led1);
         }
         return pin;
