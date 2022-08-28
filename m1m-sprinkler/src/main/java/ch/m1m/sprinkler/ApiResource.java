@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/api")
 public class ApiResource {
 
-    private static Logger LOG = LoggerFactory.getLogger(ApiResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ApiResource.class);
 
     @Inject
     StateManager stateManager;
