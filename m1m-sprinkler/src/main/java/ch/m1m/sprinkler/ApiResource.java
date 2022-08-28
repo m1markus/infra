@@ -7,10 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 
 @Path("/api")
 public class ApiResource {
@@ -36,6 +35,15 @@ public class ApiResource {
     @Produces(MediaType.APPLICATION_JSON)
     public SprinklerAppState getSprinklerAppState() {
         return stateManager.getSprinklerAppState();
+    }
+
+    @POST
+    @Path("state")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public SprinklerAppState setSprinklerAppState(SprinklerAppState appState) throws IOException {
+        stateManager.writeToFile(appState);
+        return appState;
     }
 
     @GET
