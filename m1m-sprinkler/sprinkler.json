@@ -1,0 +1,28 @@
+{
+  "pipes" : [ {
+    "id" : 1,
+    "startAt" : "14:20:00",
+    "runFor" : "PT3M",
+    "runOnMonday" : true,
+    "runOnTuesday" : true,
+    "runOnWednesday" : true,
+    "runOnThursday" : true,
+    "runOnFriday" : true,
+    "runOnSaturday" : true,
+    "runOnSunday" : true,
+    "active" : true
+  }, {
+    "id" : 2,
+    "startAt" : "14:21:00",
+    "runFor" : "PT1M",
+    "runOnMonday" : true,
+    "runOnTuesday" : true,
+    "runOnWednesday" : true,
+    "runOnThursday" : true,
+    "runOnFriday" : true,
+    "runOnSaturday" : true,
+    "runOnSunday" : true,
+    "active" : true
+  } ],
+  "active" : true
+}
